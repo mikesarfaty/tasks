@@ -1,0 +1,32 @@
+<h1>Show Todo item</h1>
+
+<ul>
+
+  <li>
+    <strong>Description:</strong>
+    <%= @todo_item.description %>
+  </li>
+
+  <li>
+    <strong>Title:</strong>
+    <%= @todo_item.title %>
+  </li>
+
+  <li>
+    <strong>Completed:</strong>
+    <%= @todo_item.is_completed %>
+  </li>
+
+  <li>
+    <strong>Time spent:</strong>
+    <%= @todo_item.time_spent %>
+  </li>
+  <li>
+    <strong>Assignee</strong>
+    <%= @todo_item.user.email %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.todo_item_path(@conn, :edit, @todo_item) %></span>
+<span><%= link "Back", to: Routes.todo_item_path(@conn, :index) %></span>

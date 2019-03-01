@@ -1,0 +1,33 @@
+<h1>Listing Todoitems</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Description</th>
+      <th>Title</th>
+      <th>Is completed</th>
+      <th>Time spent</th>
+      <th>Assigned To</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for todo_item <- @todoitems do %>
+    <tr>
+      <td><%= todo_item.description %></td>
+      <td><%= todo_item.title %></td>
+      <td><%= todo_item.is_completed %></td>
+      <td><%= todo_item.time_spent %></td>
+      <td><%= todo_item.user.email %></td>
+      <td>
+        <%= link "Show", to: Routes.todo_item_path(@conn, :show, todo_item) %>
+        <%= link "Edit", to: Routes.todo_item_path(@conn, :edit, todo_item) %>
+        <%= link "Delete", to: Routes.todo_item_path(@conn, :delete, todo_item), method: :delete, data: [confirm: "Are you sure?"] %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Todo item", to: Routes.todo_item_path(@conn, :new) %></span>

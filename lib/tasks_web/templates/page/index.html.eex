@@ -1,0 +1,8 @@
+<!--based on Nat's notes-->
+<div class="row">
+  <div class="column">
+    <h1>Task Tracker</h1>
+    <p><%= link "Register", to: Routes.user_path(@conn, :new) %></p>
+  </div>
+</div>
+
