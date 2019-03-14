@@ -28,5 +28,7 @@
 
 </ul>
 
-<span><%= link "Edit", to: Routes.todo_item_path(@conn, :edit, @todo_item) %></span>
-<span><%= link "Back", to: Routes.todo_item_path(@conn, :index) %></span>
+<span><%= link "Edit", to: Routes.todo_item_path(@conn, :edit, @todo_item),
+        class: "btn btn-default" %></span>
+<span><%= link "Back", to: Routes.todo_item_path(@conn, :index),
+        class: "btn btn-default" %></span>

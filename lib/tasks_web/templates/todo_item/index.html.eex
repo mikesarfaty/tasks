@@ -21,7 +21,7 @@
       <td><%= todo_item.time_spent %></td>
       <td><%= todo_item.user.email %></td>
       <td>
-        <%= link "Show", to: Routes.todo_item_path(@conn, :show, todo_item) %>
+        <%= link "Show", to: Routes.todo_item_path(@conn, :show, todo_item), class: "btn btn-default" %>
         <%= link "Edit", to: Routes.todo_item_path(@conn, :edit, todo_item) %>
         <%= link "Delete", to: Routes.todo_item_path(@conn, :delete, todo_item), method: :delete, data: [confirm: "Are you sure?"] %>
       </td>

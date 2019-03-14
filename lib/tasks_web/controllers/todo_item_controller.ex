@@ -49,34 +49,7 @@ defmodule TasksWeb.TodoItemController do
     |> redirect(to: Routes.todo_item_path(conn, :show, todo_item))
   end
 
-  def check_for_errors(conn, todo_item, todo_item_params) do
-  end
-
-  def update(conn, %{"id" => id, "todo_item" => todo_item_params}) do
-    todo_item = TodoItems.get_todo_item(id)
-    {new_time_spent, _} = Float.parse(Map.get(todo_item_params, "time_spent"))
-    
-
-    if todo_item.time_spent != new_time_spent do
-      if get_session(conn, :user_id) != todo_item.user.id do
-        error(conn, todo_item, "You can only track time for yourself!")
-      end
-      if Float.round(new_time_spent * 4) !=  new_time_spent * 4 do
-        error(conn, todo_item, "Please enter in increments of quarter hours")
-      end
-    end
-
-    user = if Map.get(todo_item_params, "assignee") != "" do
-      Users.get_user_by_email(Map.get(todo_item_params, "assignee"))
-    else
-      todo_item.user
-    end
-
-    if user do
-      all_params = todo_item_params
-                   |> Map.delete("assignee")
-                   |> Map.put("user_id", user.id)
-
+  def update_conn(conn, todo_item, all_params) do
       case TodoItems.update_todo_item(todo_item, all_params) do
         {:ok, todo_item} ->
           conn
@@ -84,12 +57,42 @@ defmodule TasksWeb.TodoItemController do
           |> redirect(to: Routes.todo_item_path(conn, :show, todo_item))
 
         {:error, %Ecto.Changeset{} = changeset} ->
+          IO.inspect(changeset)
           render(conn, "edit.html", todo_item: todo_item, changeset: changeset)
       end
-    else
-        if user == nil do
-          error(conn, todo_item, "That user does not exist!")
+  end
+
+  def update(conn, %{"id" => id, "todo_item" => todo_item_params}) do
+    todo_item = TodoItems.get_todo_item(id)
+    old_time_spent = todo_item.time_spent
+    {new_time_spent, _} = Float.parse(todo_item_params["time_spent"])
+    case {todo_item_params["assignee"], new_time_spent} do
+      {"", ^old_time_spent} -> # assignee and time spent
+        update_conn(conn, todo_item,
+          todo_item_params
+          |> Map.put("user_id", todo_item.user.id))
+      {"", new_time_spent} ->
+        cond do 
+          get_session(conn, :user_id) != todo_item.user.id ->
+            error(conn, todo_item, "you can only edit times for yourself!")
+          (new_time_spent * 4) == Float.round(new_time_spent * 4) ->
+            update_conn(conn, todo_item,
+              todo_item_params
+              |> Map.put("user_id", todo_item.user.id))
+          true ->
+            error(conn, todo_item, "You must enter time in incremnts of quarter hours")
         end
+      {new_assignee, ^old_time_spent} ->
+        user = Users.get_user_by_email(new_assignee)
+        if user do
+          update_conn(conn, todo_item,
+            todo_item_params
+            |> Map.put("user_id", user))
+        else
+          error(conn, todo_item, "that user does not exist!")
+        end
+      {_, _} ->
+        error(conn, todo_item, "Uknown Error")
     end
   end
 
