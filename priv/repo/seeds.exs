@@ -16,5 +16,10 @@ alias Tasks.Users.User
 alias Tasks.TodoItems.TodoItem
 
 Repo.insert!(%User{email: "alice@example.com"})
-Repo.insert!(%User{email: "mike@sarfaty.com"})
-Repo.insert!(%TodoItem{title: "title", description: "desc", user_id: 1})
+Repo.insert!(%User{email: "mike@sarfaty.com", supervisor_id: 1})
+Repo.insert!(%User{email: "bob@marley.com", supervisor_id: 1})
+
+Repo.insert!(%TodoItem{title: "Take out the trash", description: "It's gross.", user_id: 1})
+Repo.insert!(%TodoItem{title: "Feed the turtles", description: "The turtles are getting really hungry", user_id: 2})
+Repo.insert!(%TodoItem{title: "Send a fax", description: "Doesn't matter where, let's just send one.", user_id: 2})
+Repo.insert!(%TodoItem{title: "Receive a fax", description: "This might take a while...", user_id: 3})

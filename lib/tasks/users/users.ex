@@ -7,6 +7,7 @@ defmodule Tasks.Users do
   alias Tasks.Repo
 
   alias Tasks.Users.User
+  alias Tasks.TodoItems.TodoItem
 
   @doc """
   Returns the list of users.
@@ -18,7 +19,8 @@ defmodule Tasks.Users do
 
   """
   def list_users do
-    Repo.all(User)
+    Repo.all from u in User,
+      preload: [:supervisor]
   end
 
   @doc """
@@ -35,12 +37,29 @@ defmodule Tasks.Users do
       ** (Ecto.NoResultsError)
 
   """
-  def get_user!(id), do: Repo.get!(User, id)
+  def get_user!(id) do
+    Repo.one! from u in User,
+      where: u.id == ^id,
+      preload: [:supervisor]
+  end
 
-  def get_user(id),  do: Repo.get(User, id)
+  def get_user(id) do 
+    Repo.one from u in User,
+      where: u.id == ^id,
+      preload: [:supervisor]
+  end
 
   def get_user_by_email(email) do
     Repo.get_by(User, email: email)
+  end
+
+  def get_all_underlings(supervisor_id) do
+    Repo.all from u in User,
+      join: t in TodoItem,
+      on: t.user_id == u.id,
+      where: u.supervisor_id == ^supervisor_id,
+      select: {u.email, t.title, t.is_completed},
+      order_by: u.email
   end
 
 

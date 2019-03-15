@@ -5,27 +5,37 @@
     </div>
   <% end %>
 
-  <%= label f, :description %>
-  <%= text_input f, :description %>
-  <%= error_tag f, :description %>
-
-  <%= label f, :title %>
-  <%= text_input f, :title %>
+  <div class="form-group">
+  <%= label f, :title, class: "col-2" %>
+  <%= text_input f, :title, class: "col-4" %>
   <%= error_tag f, :title %>
+  </div>
 
-  <%= label f, :is_completed %>
-  <%= checkbox f, :is_completed %>
+  <div class="form-group">
+  <%= label f, :description, class: "col-2" %>
+  <%= text_input f, :description, class: "col-7" %>
+  <%= error_tag f, :description %>
+  </div>
+
+  <div class="form-group">
+  <%= label f, :is_completed, class: "col-2" %>
+  <%= checkbox f, :is_completed, class: "col-1" %>
   <%= error_tag f, :is_completed %>
+  </div>
 
-  <%= label f, :time_spent %>
-  <%= text_input f, :time_spent %>
+  <div class="form-group">
+  <%= label f, :time_spent, class: "col-2" %>
+  <%= text_input f, :time_spent, class: "col-1" %>
   <%= error_tag f, :time_spent %>
+  </div>
 
-  <%= label f, :assignee %>
-  <%= text_input f, :assignee %>
+  <div class="form-group">
+  <%= label f, :assignee, class: "col-2" %>
+  <%= text_input f, :assignee, class: "col-3" %>
   <% error_tag f, :assignee %>
+  </div>
 
   <div>
-    <%= submit "Save" %>
+    <%= submit "Save", class: "btn btn-primary" %>
   </div>
 <% end %>

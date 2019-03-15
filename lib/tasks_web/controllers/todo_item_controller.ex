@@ -87,7 +87,7 @@ defmodule TasksWeb.TodoItemController do
         if user do
           update_conn(conn, todo_item,
             todo_item_params
-            |> Map.put("user_id", user))
+            |> Map.put("user_id", user.id))
         else
           error(conn, todo_item, "that user does not exist!")
         end

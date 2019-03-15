@@ -1,8 +1,8 @@
 <!--based on Nat's notes-->
 <div class="row">
-  <div class="column">
+  <div class="col-12">
     <h1>Task Tracker</h1>
-    <p><%= link "Register", to: Routes.user_path(@conn, :new) %></p>
+    <p><%= link "Register", to: Routes.user_path(@conn, :new), class: "btn btn-primary" %></p>
   </div>
 </div>
 
