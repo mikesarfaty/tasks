@@ -16,6 +16,41 @@
     <%= end %>
   </li>
 </ul>
+
+<h5><%= @user.email %>'s Tasks</h5>
+  <table class="table table-dark table-striped col-3"> 
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th>Link</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for todo_item <- @tasks do %>
+        <tr>
+          <td> <%= todo_item.title %></td>
+          <td><%= link "Show", to: Routes.todo_item_path(@conn, :show, todo_item), class: "btn btn-secondary" %></td>
+        </tr>
+      <%= end %>
+    </tbody>
+  </table>
+
+<h5>Users <%= @user.email %> Manages</h5>
+  <table class="table table-dark table-striped col-2"> 
+    <thead>
+      <tr>
+        <th>Email</th>
+      </tr>
+    </thead>
+    <tbody>
+      <%= for email <- @underling_emails do %>
+        <tr>
+          <td> <%= email %></td>
+        </tr>
+      <%= end %>
+    </tbody>
+  </table>
+
 <h5>Tasks of managed users</h5>
   <table class="table table-dark table-striped col-4"> 
     <thead>
@@ -36,6 +71,7 @@
     </tbody>
   </table>
 
-
+<%= if @current_user do %>
 <span><%= link "Edit", to: Routes.user_path(@conn, :edit, @user), class: "btn btn-secondary" %></span>
+<%= end %>
 <span><%= link "Back", to: Routes.user_path(@conn, :index), class: "btn btn-warning" %></span>

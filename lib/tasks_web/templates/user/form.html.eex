@@ -9,6 +9,12 @@
   <%= text_input f, :email %>
   <%= error_tag f, :email %>
 
+  <div class="form-group">
+  <%= label f, :new_supervisor, class: "col-2" %>
+  <%= select f, :new_supervisor, @all_emails, class: "col-3"%>
+  <% error_tag f, :new_supervisor %>
+  </div>
+
   <div>
     <%= submit "Save" %>
   </div>

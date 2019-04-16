@@ -9,6 +9,7 @@ defmodule Tasks.TodoItems.TodoItem do
     field :time_spent, :float, default: 1.0
     field :title, :string, null: false
     belongs_to :user, Tasks.Users.User
+    has_many :timeblocks, Tasks.Timeblocks.Timeblock
 
     timestamps()
   end

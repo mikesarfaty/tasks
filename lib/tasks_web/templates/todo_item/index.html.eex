@@ -19,15 +19,23 @@
       <td><%= todo_item.description %></td>
       <td><%= todo_item.is_completed %></td>
       <td><%= todo_item.time_spent %></td>
+      <%= if todo_item.user do %>
       <td><%= todo_item.user.email %></td>
+      <%= else %>
+      <td>None</td>
+      <%= end %>
       <td>
         <%= link "Show", to: Routes.todo_item_path(@conn, :show, todo_item), class: "btn btn-secondary" %>
+        <%= if @current_user do %>
         <%= link "Edit", to: Routes.todo_item_path(@conn, :edit, todo_item), class: "btn btn-info" %>
         <%= link "Delete", to: Routes.todo_item_path(@conn, :delete, todo_item), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger" %>
+        <%= end %>
       </td>
     </tr>
 <% end %>
   </tbody>
 </table>
 
+<%= if @current_user do %>
 <span><%= link "New Todo item", to: Routes.todo_item_path(@conn, :new), class: "btn btn-success" %></span>
+<%= end %>

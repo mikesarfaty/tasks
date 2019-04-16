@@ -24,14 +24,8 @@
   </div>
 
   <div class="form-group">
-  <%= label f, :time_spent, class: "col-2" %>
-  <%= text_input f, :time_spent, class: "col-1" %>
-  <%= error_tag f, :time_spent %>
-  </div>
-
-  <div class="form-group">
   <%= label f, :assignee, class: "col-2" %>
-  <%= text_input f, :assignee, class: "col-3" %>
+  <%= select f, :assignee, @underling_emails, class: "col-3"%>
   <% error_tag f, :assignee %>
   </div>
 

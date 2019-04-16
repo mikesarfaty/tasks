@@ -14,6 +14,18 @@ defmodule TasksWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :ajax do
+    plug :accepts, ["json"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug TasksWeb.Plugs.FetchSession
+  end
+
+  scope "/ajax", TasksWeb do
+    pipe_through :ajax
+    resources "/timeblocks", TimeblockController, except: [:new, :edit]
+  end
+
   scope "/", TasksWeb do
 
     pipe_through :browser

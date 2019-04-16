@@ -18,8 +18,10 @@ defmodule Tasks.TodoItems do
 
   """
   def list_todoitems do
-    Repo.all from TodoItem,
-      preload: [user: []]
+    Repo.all(
+      from TodoItem,
+        preload: [user: []]
+    )
   end
 
   @doc """
@@ -39,11 +41,12 @@ defmodule Tasks.TodoItems do
   def get_todo_item!(id), do: Repo.get!(TodoItem, id)
 
   def get_todo_item(id) do
-    Repo.one from t in TodoItem,
-      where: t.id == ^id,
-      preload: [user: []]
+    Repo.one(
+      from t in TodoItem,
+        where: t.id == ^id,
+        preload: [user: [], timeblocks: []]
+    )
   end
-
 
   @doc """
   Creates a todo_item.
@@ -61,6 +64,13 @@ defmodule Tasks.TodoItems do
     %TodoItem{}
     |> TodoItem.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def get_tasks_for_user(user_id) do
+    Repo.all(
+      from t in TodoItem,
+        where: t.user_id == ^user_id
+    )
   end
 
   @doc """

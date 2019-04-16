@@ -29,10 +29,42 @@
 
     <tr scope="row">
       <th><strong>Assignee</strong></th>
+      <%= if @todo_item.user do %>
       <td><%= @todo_item.user.email %></td>
+      <%= else %>
+      <td>No one</td>
+      <%= end %>
+
     </tr>
+
+    <tr scope="row">
+      <th><strong>Time Spent (HMS)</strong></th>
+      <td><span id="hms"><%= @time_spent %></span></td>
+    </tr>
+    
   </tbody>
 </table>
+
+<%= if @current_user && @todo_item.user && @current_user.email == @todo_item.user.email do %>
+<script>
+  window.timeblock_finish = "<%= Routes.timeblock_path(@conn, :create) %>";
+  window.timeblock_create = "<%= Routes.timeblock_path(@conn, :create) %>";
+  window.timeblock_path = "<%= Routes.timeblock_path(@conn, :index) %>";
+</script>
+
+<%= if not @in_progress do %>
+<button id="timeblock-start"
+        data-task-id="<%= @todo_item.id %>"
+        class="btn btn-secondary">Start Timer</button>
+<span id="timeblock-finish">
+<%= else %>
+<button id="timeblock-finish"
+        data-timeblock-id="<%= @timeblock_id %>"
+        class="btn btn-secondary">End Timer</button>
+<span id="timeblock-start">
+<%= end %>
+
+<%= end %>
 
 <span><%= link "Edit", to: Routes.todo_item_path(@conn, :edit, @todo_item),
         class: "btn btn-primary" %></span>

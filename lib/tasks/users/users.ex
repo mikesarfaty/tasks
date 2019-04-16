@@ -43,7 +43,7 @@ defmodule Tasks.Users do
       preload: [:supervisor]
   end
 
-  def get_user(id) do 
+  def get_user(id) do
     Repo.one from u in User,
       where: u.id == ^id,
       preload: [:supervisor]
@@ -60,6 +60,12 @@ defmodule Tasks.Users do
       where: u.supervisor_id == ^supervisor_id,
       select: {u.email, t.title, t.is_completed},
       order_by: u.email
+  end
+
+  def get_underling_emails(supervisor_id) do
+    Repo.all from u in User,
+      where: u.supervisor_id == ^supervisor_id,
+      select: u.email
   end
 
 

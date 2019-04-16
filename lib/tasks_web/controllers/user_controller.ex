@@ -3,6 +3,7 @@ defmodule TasksWeb.UserController do
 
   alias Tasks.Users
   alias Tasks.Users.User
+  alias Tasks.TodoItems
 
   def index(conn, _params) do
     users = Users.list_users()
@@ -11,7 +12,14 @@ defmodule TasksWeb.UserController do
 
   def new(conn, _params) do
     changeset = Users.change_user(%User{})
-    render(conn, "new.html", changeset: changeset)
+
+    all_emails =
+      Users.list_users()
+      |> Enum.map(fn u ->
+        u.email
+      end)
+
+    render(conn, "new.html", changeset: changeset, all_emails: ["" | all_emails])
   end
 
   def create(conn, %{"user" => user_params}) do
@@ -27,31 +35,55 @@ defmodule TasksWeb.UserController do
     end
   end
 
-  def extract_underling_data(underling_info) do
-  end
-
   def show(conn, %{"id" => id}) do
     user = Users.get_user(id)
-    underling_info = Users.get_all_underlings(id)
-    underlings = Enum.map(Users.get_all_underlings(id),
-      fn (underling_info) ->
-        %{
-          name: Enum.at(Tuple.to_list(underling_info), 0),
-          title: Enum.at(Tuple.to_list(underling_info), 1),
-          is_completed: Enum.at(Tuple.to_list(underling_info), 2),
-        }
-      end)
-    render(conn, "show.html", user: user, underlings: underlings)
+
+    my_tasks = TodoItems.get_tasks_for_user(id)
+
+    underlings =
+      Enum.map(
+        Users.get_all_underlings(id),
+        fn underling_info ->
+          %{
+            name: Enum.at(Tuple.to_list(underling_info), 0),
+            title: Enum.at(Tuple.to_list(underling_info), 1),
+            is_completed: Enum.at(Tuple.to_list(underling_info), 2)
+          }
+        end
+      )
+
+    underling_emails = Users.get_underling_emails(id)
+
+    render(conn, "show.html",
+      user: user,
+      underlings: underlings,
+      underling_emails: underling_emails,
+      tasks: my_tasks
+    )
   end
 
   def edit(conn, %{"id" => id}) do
     user = Users.get_user!(id)
     changeset = Users.change_user(user)
-    render(conn, "edit.html", user: user, changeset: changeset)
+
+    all_emails =
+      Users.list_users()
+      |> Enum.map(fn u ->
+        u.email
+      end)
+
+    render(conn, "edit.html", user: user, changeset: changeset, all_emails: ["" | all_emails])
   end
 
   def update(conn, %{"id" => id, "user" => user_params}) do
     user = Users.get_user!(id)
+
+    user_params =
+      if user_params["new_supervisor"] == "" do
+        Map.put(user_params, "supervisor_id", nil)
+      else
+        Map.put(user_params, "supervisor_id", Users.get_user_by_email(user_params["new_supervisor"]).id)
+      end
 
     case Users.update_user(user, user_params) do
       {:ok, user} ->

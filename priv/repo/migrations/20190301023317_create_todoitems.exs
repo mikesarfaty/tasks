@@ -7,7 +7,7 @@ defmodule Tasks.Repo.Migrations.CreateTodoitems do
       add :title, :string, null: false
       add :is_completed, :boolean, default: false, null: false
       add :time_spent, :float, default: 0
-      add :user_id, references(:users, on_delete: :nothing)
+      add :user_id, references(:users, on_delete: :nilify_all)
 
       timestamps()
     end
